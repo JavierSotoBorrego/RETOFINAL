@@ -19,8 +19,8 @@ public class Controller {
 	@GetMapping(path="/login",produces = "text/event-stream")
 	public Flux<String> login(@RequestParam(value = "usuario") String usuario,@RequestParam(value = "password") String password) {
 		
-		flux.List<Persona> user = listUsuarios.stream().filter(usur -> (usur.getUsuario().equals(usuario)) && (usur.getPassword().equals(password))).collect(Collectors.toList());
-		if(user.user.get(1).getNombre().equals("admin")) {
+		List<Persona> user = listUsuarios.stream().filter(usur -> (usur.getUsuario().equals(usuario)) && (usur.getPassword().equals(password))).collect(Collectors.toList());
+		if(user.get(1).getNombre().equals("admin")) {
 			return "Hola " + user.get(1).getNombre() + " esta es la lista de usuarios: " + user;
 		}else if(user.get(1).getNombre()){
 			return "Hola " + user.get(1).getNombre();
@@ -30,22 +30,12 @@ public class Controller {
 		
 	}
 	@GetMapping(path="/add", produces = "text/event-stream")
-	public Flux<String> add(@RequestParam(value = "usuario") String usuario,@RequestParam(value = "password") String password) {
+	public void add(@RequestParam(value = "nombre") String nombre, @RequestParam(value = "usuario") String usuario,@RequestParam(value = "password") String password) {
 		if(usuario=="admin" && password=="admin") {
-			listUsuarios.add("usuario","usuario","password");
+			listUsuarios.add(new Persona("nombre","usuario","password"));
 		}
 		
 	}
 	
-	
 
-	@GetMapping(path = "/numbers", produces = "text/event-stream")
-	public Flux<Integer> numbers() {
-
-		Flux<Integer> flux = Flux.range(1, 30).delayElements(Duration.ofSeconds(1));
-		flux.subscribe(n -> subscriber.print(n)); // Suscriptor 1
-		flux.subscribe(n -> System.out.println("Subscriber 2: " + n)); // Suscriptor 2
-
-		return flux; // Suscriptor 3
-}
 }
